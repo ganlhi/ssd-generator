@@ -15,7 +15,7 @@ allShips =
 rmn_dd_havok : SSD
 rmn_dd_havok =
     { name = "Havok"
-    , category = DD
+    , category = Destroyer
     , faction = "RMN"
     , baseCost = 35
     , actionPoints = 1
@@ -173,7 +173,7 @@ rmn_dd_havok =
 pn_dd_bastogne : SSD
 pn_dd_bastogne =
     { name = "Bastogne"
-    , category = DD
+    , category = Destroyer
     , faction = "PN"
     , baseCost = 32
     , actionPoints = 1
