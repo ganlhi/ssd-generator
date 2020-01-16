@@ -1,10 +1,11 @@
 module Ui.SSD exposing (ssdView)
 
 import Dict exposing (Dict)
-import Element exposing (Attribute, Element, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, fillPortion, height, maximum, padding, paddingEach, paragraph, px, row, spaceEvenly, spacing, table, text, width, wrappedRow)
+import Element exposing (Attribute, Element, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, fillPortion, height, htmlAttribute, maximum, padding, paddingEach, paragraph, px, rotate, row, spaceEvenly, spacing, table, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
+import Html.Attributes exposing (class)
 import List.Extra
 import SSD exposing (Boxes(..), Defenses, HitLocation, MountedWeapon, SSD, Shielding(..), System(..), WeaponMounts, WrapMode(..), boxesNumber, weapons)
 import Ui.Colors as Colors
@@ -33,16 +34,16 @@ ssdView ssd =
             --, Element.explain Debug.todo
             ]
             [ hitLocations ssd
+            , facings ssd
             , column
-                [ width <| fillPortion 2
+                [ width <| fillPortion 1
                 , height fill
                 , alignTop
                 , spacing 8
                 ]
-                [ structuralIntegrity ssd.structuralIntegrity
-                , facings ssd
+                [ weaponCards ssd
+                , structuralIntegrity ssd.structuralIntegrity
                 ]
-            , weaponCards ssd
             , actionPoints ssd.actionPoints
             ]
         ]
@@ -197,7 +198,7 @@ structuralIntegrity siBoxes =
 
 facings : SSD -> Element msg
 facings ssd =
-    column [ spacing 8, width fill ]
+    column [ spacing 8, width <| fillPortion 2, alignTop ]
         [ facing "Forward" ssd.weaponMounts.f ssd.defenses.f
         , facing "Aft" ssd.weaponMounts.a ssd.defenses.a
         , facing "Port" ssd.weaponMounts.p ssd.defenses.p
@@ -209,21 +210,27 @@ facings ssd =
 
 facing : String -> List MountedWeapon -> Defenses -> Element msg
 facing name mountedWeapons defenses =
-    column [ width fill ]
+    row [ width fill ]
         [ el
             [ Background.color Colors.gray
             , padding 8
-            , Border.roundEach { topLeft = 4, topRight = 4, bottomLeft = 0, bottomRight = 0 }
+            , Border.roundEach { topLeft = 4, topRight = 0, bottomLeft = 4, bottomRight = 0 }
+            , height fill
+            , Font.center
+            , htmlAttribute <| class "vertical-text"
+
+            --, rotate <| degrees 270
             ]
           <|
             text name
         , row
             [ width fill
+            , height fill
             , spacing 8
             , padding 8
             , Border.color Colors.gray
             , Border.width 1
-            , Border.roundEach { topLeft = 0, topRight = 0, bottomLeft = 4, bottomRight = 4 }
+            , Border.roundEach { topLeft = 0, topRight = 4, bottomLeft = 0, bottomRight = 4 }
             ]
             [ mountedWeaponsView mountedWeapons
             , defensesView defenses
@@ -326,7 +333,8 @@ weaponCards ssd =
         |> List.map weaponCard
         |> column
             [ spacing 8
-            , width <| fillPortion 1
+
+            --, width <| fillPortion 1
             , height fill
             , alignTop
             ]
@@ -334,12 +342,10 @@ weaponCards ssd =
 
 weaponCard : Weapon -> Element msg
 weaponCard weapon =
-    column [ padding 4, spacing 8, Border.width 1, width fill ]
+    column [ padding 8, spacing 8, Border.width 1, width fill ]
         [ weaponName weapon
-        , row [ spacing 16 ]
-            [ rangeBandsTable weapon.rangeBands
-            , propertiesList weapon.properties
-            ]
+        , rangeBandsTable weapon.rangeBands
+        , propertiesList weapon.properties
         ]
 
 
@@ -379,8 +385,8 @@ rangeToString ( min, max ) =
 
 propertiesList : Dict String String -> Element msg
 propertiesList props =
-    Dict.foldl addProp [] props
-        |> column [ alignTop, Font.italic ]
+    Dict.foldr addProp [] props
+        |> column [ alignTop, spacing 4, Font.italic ]
 
 
 addProp : String -> String -> List (Element msg) -> List (Element msg)

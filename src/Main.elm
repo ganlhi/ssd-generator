@@ -4,6 +4,7 @@ import Browser
 import Data.Ships exposing (allShips)
 import Element exposing (centerX, centerY, el, fill, focusStyle, height, layout, layoutWith, padding, row, spacing, text, width)
 import Html exposing (Html)
+import Html.Attributes
 import SSD exposing (SSD)
 import Ui.SSD exposing (ssdView)
 import Ui.Sidebar exposing (sidebar)

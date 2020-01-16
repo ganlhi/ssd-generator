@@ -1,10 +1,11 @@
 module Ui.Sidebar exposing (sidebar)
 
-import Element exposing (Element, alignTop, column, el, fill, height, padding, row, spacing, text)
+import Element exposing (Element, alignTop, column, el, fill, height, htmlAttribute, padding, row, spacing, text)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Html.Attributes exposing (class)
 import SSD exposing (SSD)
 import Ui.Colors as Colors
 
@@ -17,7 +18,14 @@ sidebar list current toMsg =
     in
     factions
         |> List.map (factionEntry list current toMsg)
-        |> column [ spacing 8, padding 8, height fill, alignTop, Border.widthEach { top = 0, bottom = 0, left = 0, right = 1 } ]
+        |> column
+            [ spacing 8
+            , padding 8
+            , height fill
+            , alignTop
+            , Border.widthEach { top = 0, bottom = 0, left = 0, right = 1 }
+            , htmlAttribute <| class "sidebar"
+            ]
 
 
 factionList : String -> List SSD -> List SSD

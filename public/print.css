@@ -1,0 +1,7 @@
+.sidebar {
+    display: none !important;
+}
+
+.sidebar + div {
+    margin-left: 0 !important;
+}
